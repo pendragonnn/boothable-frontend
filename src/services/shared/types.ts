@@ -98,7 +98,9 @@ export interface Event {
   location: string;
   startDate: string;
   endDate: string;
-  mapImage: string | null;
+  eventBoothMap: string | null;
+  eventCover: string | null;
+  paymentVa: string | null;
   categoryId: string;
   organizerId: string;
   createdAt: string;

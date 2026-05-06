@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import { QueryProvider } from "@/components/providers/query-provider";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -28,7 +29,11 @@ export default function RootLayout({
       className={`${outfit.variable} ${jakarta.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen flex flex-col font-sans">{children}</body>
+      <body className="min-h-screen flex flex-col font-sans">
+        <QueryProvider>
+          {children}
+        </QueryProvider>
+      </body>
     </html>
   );
 }

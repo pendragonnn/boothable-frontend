@@ -122,6 +122,27 @@ export async function uploadEventMap(
 }
 
 /**
+ * Upload event cover image (Organizer)
+ * POST /organizer/events/:id/cover
+ */
+export async function uploadEventCover(
+  id: string,
+  file: File,
+): Promise<ApiResponse<Event>> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post<ApiResponse<Event>>(
+    `/organizer/events/${id}/cover`,
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    },
+  );
+  return response.data;
+}
+
+/**
  * Delete an event (Organizer)
  * DELETE /organizer/events/:id
  */

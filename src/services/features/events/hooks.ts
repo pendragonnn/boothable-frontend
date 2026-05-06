@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 import {
   fetchEvents,
@@ -6,6 +6,7 @@ import {
   fetchEventBooths,
   fetchOrganizerEvents,
   adminFetchEvents,
+  uploadEventCover,
 } from "./api";
 import type { FetchEventsParams } from "./types";
 
@@ -69,5 +70,15 @@ export function useAdminEvents(params?: FetchEventsParams) {
     queryFn: () => adminFetchEvents(params),
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
+  });
+}
+
+/**
+ * Hook for uploading event cover image
+ */
+export function useUploadEventCover() {
+  return useMutation({
+    mutationFn: ({ id, file }: { id: string; file: File }) =>
+      uploadEventCover(id, file),
   });
 }

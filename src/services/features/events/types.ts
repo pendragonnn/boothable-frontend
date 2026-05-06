@@ -8,8 +8,10 @@ export type { Event, Booth };
  */
 export interface FetchEventsParams {
   search?: string;
+  categoryId?: string;
   page?: number;
   limit?: number;
+  sort?: string;
 }
 
 /**
@@ -22,6 +24,7 @@ export interface CreateEventRequest {
   description?: string;
   startDate: string;
   endDate: string;
+  eventCover?: string;
 }
 
 /**
@@ -34,6 +37,7 @@ export interface UpdateEventRequest {
   description?: string;
   startDate?: string;
   endDate?: string;
+  eventCover?: string;
 }
 
 /**

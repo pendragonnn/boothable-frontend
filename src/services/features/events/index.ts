@@ -11,6 +11,7 @@ export {
   adminFetchEvents,
   adminUpdateEvent,
   adminDeleteEvent,
+  uploadEventCover,
 } from "./api";
 export {
   useEventList,
@@ -18,6 +19,7 @@ export {
   useEventBooths,
   useOrganizerEvents,
   useAdminEvents,
+  useUploadEventCover,
 } from "./hooks";
 export type {
   FetchEventsParams,
