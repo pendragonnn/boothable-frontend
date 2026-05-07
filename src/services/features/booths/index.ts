@@ -8,7 +8,16 @@ export {
   adminUpdateBooth,
   adminDeleteBooth,
 } from "./api";
-export { useBoothDetail, useAdminBooths } from "./hooks";
+export { 
+  useBoothDetail, 
+  useAdminBooths,
+  useCreateBooth,
+  useBulkCreateBooths,
+  useUpdateBooth,
+  useDeleteBooth,
+  useAdminUpdateBooth,
+  useAdminDeleteBooth
+} from "./hooks";
 export type {
   FetchBoothsParams,
   CreateBoothRequest,

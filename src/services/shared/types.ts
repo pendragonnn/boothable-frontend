@@ -119,10 +119,13 @@ export interface Booth {
   id: string;
   eventId: string;
   boothCode: string;
+  type: string;
+  size: string;
   pricePerDay: number;
   status: BoothStatus;
   availableStartDate: string;
   availableEndDate: string;
+  description: string | null;
   createdAt: string;
   updatedAt: string;
   event?: Pick<Event, "id" | "eventName" | "location">;
