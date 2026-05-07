@@ -22,7 +22,7 @@ import { EVENTS_HERO_CONTENT, SLIDE_GRADIENTS } from "./constant";
 export function EventsHero() {
   const { data, isLoading } = useEventList({ limit: 5 });
   const plugin = useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: true })
+    Autoplay({ delay: 5000 })
   );
 
   const events = data?.data || [];
