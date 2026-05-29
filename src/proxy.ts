@@ -9,10 +9,10 @@ const LANDING_PAGE_ROUTES = [
 ];
 
 // Admin-only routes
-const ADMIN_ROUTES = ["/dashboard"];
+const ADMIN_ROUTES = ["/dashboard/admin"];
 
 // Organizer-only routes
-const ORGANIZER_ROUTES = ["/organizer"];
+const ORGANIZER_ROUTES = ["/dashboard/organizer"];
 
 // Auth routes (login/register)
 const AUTH_ROUTES = ["/login", "/register"];
@@ -21,17 +21,24 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Get auth token from cookies
-  const authCookie = request.cookies.get("auth");
+  const accessTokenCookie = request.cookies.get("accessToken");
+  const userCookie = request.cookies.get("user");
   let isAuthenticated: string | null = null;
   let userRole: string | null = null;
 
-  if (authCookie?.value) {
+  if (accessTokenCookie?.value) {
+    isAuthenticated = accessTokenCookie.value;
+  }
+  
+  if (userCookie?.value) {
     try {
-      const parsed = JSON.parse(authCookie.value);
-      isAuthenticated = parsed.state?.accessToken || null;
-      userRole = parsed.state?.user?.role || null;
-    } catch {
-      isAuthenticated = null;
+      // js-cookie url-encodes the JSON, so we must decode it first
+      const decodedCookie = decodeURIComponent(userCookie.value);
+      const user = JSON.parse(decodedCookie);
+      userRole = user.role || null;
+    } catch (e) {
+      console.error("Failed to parse user cookie in proxy", e);
+      userRole = null;
     }
   }
 

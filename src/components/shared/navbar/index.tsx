@@ -11,18 +11,45 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { NAVBAR_MENUS } from "./constant";
+import { useAuthStore, logout } from "@/services/features/auth";
+import { UserRole } from "@/services/shared";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
+
+  const user = useAuthStore((state) => state.user);
+  const clearAuth = useAuthStore((state) => state.clearAuth);
+  const refreshToken = useAuthStore((state) => state.refreshToken);
 
   useEffect(() => {
+    setIsClient(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      if (refreshToken) {
+        await logout({ refreshToken });
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      clearAuth();
+      toast.success("Berhasil logout", {
+        description: "Anda telah keluar dari akun.",
+      });
+      router.push("/");
+    }
+  };
 
   return (
     <header
@@ -58,12 +85,37 @@ export function Navbar() {
             ))}
           </ul>
           <div className="flex items-center gap-3 border-l pl-6 border-border">
-            <Button render={<Link href="/login" />} nativeButton={false} variant="ghost" className="font-semibold">
-              Masuk
-            </Button>
-            <Button render={<Link href="/register" />} nativeButton={false} className="font-semibold">
-              Daftar
-            </Button>
+            {!isClient ? (
+              <div className="w-24 h-10 animate-pulse bg-slate-100 rounded-md" />
+            ) : user ? (
+              <>
+                {user.role === UserRole.VENDOR && (
+                  <Button render={<Link href="/bookings" />} nativeButton={false} variant="outline" className="font-semibold hidden lg:flex">
+                    Pantau Order
+                  </Button>
+                )}
+                {user.role === UserRole.ORGANIZER && (
+                  <Button render={<Link href="/dashboard/organizer" />} nativeButton={false} variant="outline" className="font-semibold hidden lg:flex">
+                    Dashboard
+                  </Button>
+                )}
+                <span className="text-sm font-medium text-slate-700 mx-2 hidden lg:inline-block">
+                  Halo, {user.name.split(" ")[0]}
+                </span>
+                <Button onClick={handleLogout} variant="ghost" className="font-semibold text-red-600 hover:text-red-700 hover:bg-red-50">
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button render={<Link href="/login" />} nativeButton={false} variant="ghost" className="font-semibold">
+                  Masuk
+                </Button>
+                <Button render={<Link href="/register" />} nativeButton={false} className="font-semibold">
+                  Daftar
+                </Button>
+              </>
+            )}
           </div>
         </nav>
 
@@ -97,14 +149,37 @@ export function Navbar() {
                   </li>
                 ))}
               </ul>
-              <div className="flex flex-col gap-3 mt-auto mb-8">
-                <Button render={<Link href="/login" />} nativeButton={false} variant="outline" className="w-full justify-center h-12 text-base font-semibold" onClick={() => setIsOpen(false)}>
-                  Masuk
-                </Button>
-                <Button render={<Link href="/register" />} nativeButton={false} className="w-full justify-center h-12 text-base font-semibold" onClick={() => setIsOpen(false)}>
-                  Daftar
-                </Button>
-              </div>
+              {!isClient ? null : user ? (
+                <div className="flex flex-col gap-3 mt-auto mb-8">
+                  <div className="py-4 border-b border-slate-100 mb-2">
+                    <p className="text-sm text-slate-500">Masuk sebagai</p>
+                    <p className="font-semibold text-slate-900">{user.name}</p>
+                    <p className="text-xs text-slate-500 uppercase mt-1">{user.role}</p>
+                  </div>
+                  {user.role === UserRole.VENDOR && (
+                    <Button render={<Link href="/bookings" />} nativeButton={false} variant="outline" className="w-full justify-center h-12 text-base font-semibold" onClick={() => setIsOpen(false)}>
+                      Pantau Order
+                    </Button>
+                  )}
+                  {user.role === UserRole.ORGANIZER && (
+                    <Button render={<Link href="/dashboard/organizer" />} nativeButton={false} variant="outline" className="w-full justify-center h-12 text-base font-semibold" onClick={() => setIsOpen(false)}>
+                      Dashboard Organizer
+                    </Button>
+                  )}
+                  <Button onClick={() => { handleLogout(); setIsOpen(false); }} variant="outline" className="w-full justify-center h-12 text-base font-semibold text-red-600 hover:text-red-700 hover:bg-red-50">
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3 mt-auto mb-8">
+                  <Button render={<Link href="/login" />} nativeButton={false} variant="outline" className="w-full justify-center h-12 text-base font-semibold" onClick={() => setIsOpen(false)}>
+                    Masuk
+                  </Button>
+                  <Button render={<Link href="/register" />} nativeButton={false} className="w-full justify-center h-12 text-base font-semibold" onClick={() => setIsOpen(false)}>
+                    Daftar
+                  </Button>
+                </div>
+              )}
             </SheetContent>
           </Sheet>
         </div>
