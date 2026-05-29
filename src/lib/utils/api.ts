@@ -27,43 +27,35 @@ const processQueue = (error: unknown, token: string | null = null) => {
 const getAuthFromCookies = () => {
   if (typeof window === "undefined") return null;
 
-  const authCookie = Cookies.get("auth");
-  if (!authCookie) return null;
-
-  try {
-    const parsed = JSON.parse(authCookie);
-    return parsed.state;
-  } catch {
-    return null;
-  }
+  const accessToken = Cookies.get("accessToken");
+  const refreshToken = Cookies.get("refreshToken");
+  
+  if (!accessToken) return null;
+  return { accessToken, refreshToken };
 };
 
 // Helper to update auth tokens in cookies
 const updateAuthTokens = (accessToken: string, refreshToken: string) => {
   if (typeof window === "undefined") return;
 
-  const authCookie = Cookies.get("auth");
-  if (!authCookie) return;
-
-  try {
-    const parsed = JSON.parse(authCookie);
-    parsed.state.accessToken = accessToken;
-    parsed.state.refreshToken = refreshToken;
-
-    Cookies.set("auth", JSON.stringify(parsed), {
-      expires: 7,
-      secure: true,
-      sameSite: "strict",
-    });
-  } catch (error) {
-    console.error("[API] Failed to update auth tokens:", error);
-  }
+  Cookies.set("accessToken", accessToken, {
+    expires: 7,
+    secure: true,
+    sameSite: "strict",
+  });
+  Cookies.set("refreshToken", refreshToken, {
+    expires: 7,
+    secure: true,
+    sameSite: "strict",
+  });
 };
 
 // Helper to clear auth tokens
 const clearAuthTokens = () => {
   if (typeof window === "undefined") return;
-  Cookies.remove("auth");
+  Cookies.remove("accessToken");
+  Cookies.remove("refreshToken");
+  Cookies.remove("user");
 };
 
 // Helper function to create axios instance with interceptors
