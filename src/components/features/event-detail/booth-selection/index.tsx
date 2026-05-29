@@ -146,7 +146,7 @@ export function BoothSelection({ eventId }: BoothSelectionProps) {
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetContent className="w-full sm:max-w-md bg-white border-l-0 shadow-2xl font-plus-jakarta overflow-y-auto">
           <SheetHeader className="text-left space-y-4 pb-6 border-b border-slate-100">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 pr-8">
               <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-none">
                 <CheckCircle2 className="w-3 h-3 mr-1" /> Tersedia
               </Badge>
@@ -172,26 +172,28 @@ export function BoothSelection({ eventId }: BoothSelectionProps) {
               <p className="text-3xl font-bold text-indigo-600">
                 {selectedBooth ? formatCurrency(selectedBooth.pricePerDay) : "Rp 0"}
               </p>
-              <p className="text-xs text-slate-400 flex items-center mt-2">
-                <ShieldAlert className="w-3.5 h-3.5 mr-1" /> Harga final belum termasuk pajak PPN.
-              </p>
             </div>
 
-            <div className="space-y-4">
-              <h4 className="font-semibold text-slate-900">Fasilitas Termasuk:</h4>
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-4">
+              <h4 className="font-semibold text-slate-900">Informasi Booth:</h4>
               <ul className="space-y-3">
-                <li className="flex items-center text-sm text-slate-600">
-                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-3 shrink-0"></div>
-                  Luas area {selectedBooth?.size || "standar 2x2"} meter
-                </li>
-                <li className="flex items-center text-sm text-slate-600">
-                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-3 shrink-0"></div>
-                  1 Meja & 2 Kursi standar
-                </li>
-                <li className="flex items-center text-sm text-slate-600">
-                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-3 shrink-0"></div>
-                  Daya listrik 2 Ampere (MCB)
-                </li>
+                {selectedBooth?.size && (
+                  <li className="flex items-center text-sm text-slate-600">
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-3 shrink-0"></div>
+                    Luas area: {selectedBooth.size} meter
+                  </li>
+                )}
+                {selectedBooth?.description && (
+                  <li className="flex items-center text-sm text-slate-600">
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 mr-3 shrink-0"></div>
+                    {selectedBooth.description}
+                  </li>
+                )}
+                {!selectedBooth?.size && !selectedBooth?.description && (
+                  <li className="text-sm text-slate-500 italic">
+                    Tidak ada informasi tambahan.
+                  </li>
+                )}
               </ul>
             </div>
           </div>

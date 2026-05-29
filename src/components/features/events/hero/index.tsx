@@ -22,14 +22,14 @@ import { EVENTS_HERO_CONTENT, SLIDE_GRADIENTS } from "./constant";
 export function EventsHero() {
   const { data, isLoading } = useEventList({ limit: 5 });
   const plugin = useRef(
-    Autoplay({ delay: 5000 })
+    Autoplay({ delay: 5000, stopOnInteraction: false })
   );
 
   const events = data?.data || [];
 
   if (isLoading || events.length === 0) {
     return (
-      <div className="w-full h-[500px] md:h-[600px] bg-slate-900 flex items-center justify-center">
+      <div className="w-full h-[400px] md:h-[500px] bg-slate-900 flex items-center justify-center mt-16 lg:mt-20">
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold font-heading text-white">
             {EVENTS_HERO_CONTENT.headline}
@@ -46,8 +46,6 @@ export function EventsHero() {
     <div className="relative w-full">
       <Carousel
         plugins={[plugin.current]}
-        onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.reset}
         opts={{
           loop: true,
         }}
@@ -57,7 +55,7 @@ export function EventsHero() {
           {events.map((event, index) => {
             const fallbackGradient = SLIDE_GRADIENTS[index % SLIDE_GRADIENTS.length];
             return (
-              <CarouselItem key={event.id} className="relative w-full h-[500px] md:h-[600px] xl:h-[700px]">
+              <CarouselItem key={event.id} className="relative w-ful h-[100vh]">
                 {/* Background Image or Gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${fallbackGradient}`}>
                   {event.eventCover && (
@@ -117,7 +115,10 @@ export function EventsHero() {
             );
           })}
         </CarouselContent>
-       
+        <div className="hidden md:block">
+          <CarouselPrevious className="left-4 bg-white/20 border-white/40 text-white hover:bg-white/40 hover:text-white backdrop-blur-md" />
+          <CarouselNext className="right-4 bg-white/20 border-white/40 text-white hover:bg-white/40 hover:text-white backdrop-blur-md" />
+        </div>
       </Carousel>
     </div>
   );

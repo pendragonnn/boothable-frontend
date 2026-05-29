@@ -52,7 +52,7 @@ export function ShowcaseEvent() {
                   </span>
                 </CardDescription>
               </CardHeader>
-              <CardFooter className="p-5 pt-0">
+              <CardFooter className="p-5 pt-4">
                 <Button className="w-full" variant="outline">
                   <Link href={`/events/${event.id}`}>
                     {EVENT_SHOWCASE_CONTENT.ctaSecondary}

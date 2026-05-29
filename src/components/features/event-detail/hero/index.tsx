@@ -31,7 +31,7 @@ export function EventHero({ eventId }: EventHeroProps) {
   const tagline = `${event.eventName}: ${EVENT_HERO_CONTENT.defaultTagline}`;
 
   return (
-    <div className="relative w-full h-[600px] lg:h-[700px] flex items-center justify-center isolate overflow-hidden group">
+    <div className="relative w-full  flex items-center justify-center isolate overflow-hidden group">
       {/* Background Image */}
       <Image
         src={bgImage}
@@ -47,7 +47,8 @@ export function EventHero({ eventId }: EventHeroProps) {
         <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
           
           <Badge className="bg-indigo-500/20 text-indigo-300 border-indigo-500/30 px-4 py-1.5 text-sm rounded-full backdrop-blur-md">
-            Festival & Exhibition
+            {/* @ts-ignore */}
+            {event.category?.name || "Event"}
           </Badge>
 
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold font-heading text-white tracking-tight drop-shadow-md">
@@ -87,14 +88,14 @@ export function EventHero({ eventId }: EventHeroProps) {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-12 pb-8 mb-8">
             <Button size="lg" className="bg-[#6366f1] hover:bg-[#4f46e5] text-white rounded-xl h-14 px-8 text-lg w-full sm:w-auto shadow-lg shadow-indigo-500/30 border-none">
               <Link href="#booth-selection">
                 {EVENT_HERO_CONTENT.ctaPrimary}
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="bg-transparent border-slate-600 text-slate-200 hover:bg-slate-800 hover:text-white rounded-xl h-14 px-8 text-lg w-full sm:w-auto">
-              <Link href="#about-event">
+            <Button size="lg" variant="outline" className="bg-transparent border-slate-600 text-slate-200 hover:bg-slate-800 hover:text-white rounded-xl h-14 px-8 text-lg w-full sm:w-auto whitespace-nowrap">
+              <Link href="#about-event" className="flex items-center justify-center">
                 <InfoIcon className="w-5 h-5 mr-2" />
                 {EVENT_HERO_CONTENT.ctaSecondary}
               </Link>
